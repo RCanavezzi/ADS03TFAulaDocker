@@ -1,0 +1,19 @@
+FROM node:22
+
+# Diretório de trabalho dentro do contêiner
+WORKDIR /usr/src/app
+
+
+# Copiar os arquivos necessários para o contêiner
+COPY package*.json ./
+COPY . .
+
+# Instalar as dependências
+RUN npm install
+
+
+# Expor a porta padrão
+EXPOSE 3000
+
+# Comando para iniciar o aplicativo
+CMD [ "npm", "start" ]s
