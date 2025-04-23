@@ -1,13 +1,10 @@
-# Utiliza a imagem oficial mais recente do PostgreSQL como base.
-FROM postgres:13
+FROM postgres:latest
 
-# Defina variáveis de ambiente para configurar o PostgreSQL
-ENV POSTGRES_DB=myDB
-ENV POSTGRES_USER=user
-ENV POSTGRES_PASSWORD=admin
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=admin_password
+ENV POSTGRES_DB=satisfaction_survey
 
-# Copie o script de inicialização para o diretório de inicialização do PostgreSQL
-COPY init.sql /docker-entrypoint-initdb.d/
-
-# Exponha a porta padrão do PostgreSQL
 EXPOSE 5432
+
+# Optional: Copy initialization scripts if needed
+# COPY ./init-scripts/ /docker-entrypoint-initdb.d/

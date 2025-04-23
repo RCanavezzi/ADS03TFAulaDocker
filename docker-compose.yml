@@ -1,47 +1,38 @@
 version: '3.8'
+
 services:
- web:
-  build: .
-  ports:
-    - "3000:3000"
- environment:
-    - NODE_ENV=development
-    - DATABASE_URL=postgres://user:admin@db:5432/myDB
- volumes:
-    - .:/usr/src/app
-    - /usr/src/app/node_modules
- command: npm run dev
- depends_on:
-    - dbPostgres
- networks:
-    - app-network
-dbPostgres:
-  image: postgres:13
+  postgres:
+    build:
+      context: ./docker/postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin_password
+      POSTGRES_DB: satisfaction_survey
+    networks:
+      - survey-network
 
-  environment:
-    - POSTGRES_USER=user
-    - POSTGRES_PASSWORD=admin
-    - POSTGRES_DB=myDB
-  volumes:
-    - db_data:/var/lib/postgresql/data
-  networks:
-    - app-network
-volumes:
-  db_data:
+  mongodb:
+    build:
+      context: ./docker/mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin_password
+    networks:
+      - survey-network
+
+  nodejs:
+    build:
+      context: ./docker/nodejs
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - mongodb
+    networks:
+      - survey-network
+
 networks:
-  app-network:
+  survey-network:
     driver: bridge
-
-dbMongo:
-  build: ./MongoDB
-
-  ports:
-    "27017:27017"
-  volumes:
-    -db_data:dataMongo/data/db
-  networks:
-  - app-network
-  
-  
 
 
