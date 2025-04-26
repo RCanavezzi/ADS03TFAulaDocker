@@ -3,17 +3,17 @@ FROM node:22
 # Diretório de trabalho dentro do contêiner
 WORKDIR /usr/src/app
 
-
-# Copiar os arquivos necessários para o contêiner
+# Copiar os arquivos de dependências primeiro (melhora o cache do Docker)
 COPY package*.json ./
-COPY . .
 
 # Instalar as dependências
 RUN npm install
 
+# Copiar o restante da aplicação
+COPY . .
 
-# Expor a porta padrão
+# Expor a porta padrão da aplicação
 EXPOSE 3000
 
 # Comando para iniciar o aplicativo
-CMD [ "npm", "start" ]s
+CMD [ "npm", "start" ]
